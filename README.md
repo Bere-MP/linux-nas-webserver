@@ -38,19 +38,19 @@ The goal is to allow users to remotely manage files, control user access, monito
 
 ## Team Responsibilities
 
-### Person 1 — Linux Server & System Monitoring
+### Ibrahim — Linux Server & System Monitoring
 - Set up and configure Ubuntu Linux, Apache, and MySQL.
 - Configure firewall, networking, and server security.
 - Implement system monitoring features.
 - Deploy and test the application on the Linux server.
 
-### Person 2 — File Management & Backup
+### Mahnoor — File Management & Backup
 - Implement file and folder management functionality.
 - Develop file upload, download, and deletion features.
 - Implement automatic backup scheduling and restoration.
 - Create the file management interface.
 
-### Person 3 — Database & User Management
+### Berenice — Database & User Management
 - Design and configure the MySQL database.
 - Implement user authentication and authorization.
 - Create user management functionality.
