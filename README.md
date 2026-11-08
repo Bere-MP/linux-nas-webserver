@@ -36,6 +36,39 @@ The goal is to allow users to remotely manage files, control user access, monito
 - **Web Server:** Apache
 - **Version Control:** Git and GitHub
 
+## Project Structure
+
+```text
+linux-nas-webserver/
+├── nas-backend/
+│   ├── src/main/java/com/nas/webserver/
+│   │   ├── controller/
+│   │   ├── service/
+│   │   ├── repository/
+│   │   ├── model/
+│   │   └── config/
+│   ├── src/main/resources/
+│   │   ├── static/
+│   │   │   ├── css/
+│   │   │   └── js/
+│   │   ├── templates/
+│   │   └── application.properties
+│   └── pom.xml
+└── README.md
+```
+
+### Folder Descriptions
+
+- **controller/** — Handles API requests.
+- **service/** — Contains application logic.
+- **repository/** — Handles database operations.
+- **model/** — Stores data models.
+- **config/** — Contains security and application settings.
+- **static/** — Stores CSS and JavaScript.
+- **templates/** — Stores HTML pages.
+- **application.properties** — Spring Boot configuration.
+- **pom.xml** — Maven dependencies.
+
 ## Team Responsibilities
 
 ### Ibrahim — Linux Server & System Monitoring
