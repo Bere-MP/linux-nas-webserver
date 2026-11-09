@@ -102,6 +102,17 @@ public class BackupService {
         }
     }
 
+    // Get a backup ZIP for downloading
+    public Path downloadBackup(String filename) throws IOException {
+        Path backup = resolveBackup(filename);
+
+        if (!Files.isRegularFile(backup, LinkOption.NOFOLLOW_LINKS)) {
+            throw new NoSuchFileException(filename);
+        }
+
+        return backup;
+    }
+
     // Restore a backup into an empty storage directory
     public void restoreBackup(String filename) throws IOException {
         Path source = resolveBackup(filename);
