@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backup & Restore | NAS Server</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/backups.js" defer></script>
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+            <div>
+                <h2>NAS Server</h2>
+                <span>Cloud Storage</span>
+            </div>
+        </div>
+
+        <p class="nav-label">WORKSPACE</p>
+
+        <nav>
+            <a href="/files.html">
+                <span class="nav-icon">📄</span> My Files
+            </a>
+
+            <a href="/folders.html">
+                <span class="nav-icon">📁</span> Folders
+            </a>
+
+            <a href="/backups.html" class="active">
+                <span class="nav-icon">💾</span> Backup & Restore
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>Personal Storage</p>
+            <span>Manage your files securely</span>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="content">
+
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">MY WORKSPACE</p>
+                <h1>Backup & Restore</h1>
+                <p>Protect your files and restore previous backups.</p>
+            </div>
+
+            <button type="button"
+                    class="secondary-btn"
+                    id="refreshButton">
+                ↻ Refresh
+            </button>
+        </header>
+
+        <!-- Create backup -->
+        <section class="card">
+            <div class="section-heading">
+                <h2>Create Backup</h2>
+                <p>Save a copy of your current files and folders.</p>
+            </div>
+
+            <div class="backup-create">
+                <div class="backup-info">
+                    <span class="backup-icon">💾</span>
+
+                    <div>
+                        <h3>Manual Backup</h3>
+                        <p>Create a ZIP backup of your storage.</p>
+                    </div>
+                </div>
+
+                <button type="button"
+                        class="primary-btn"
+                        id="createBackupButton">
+                    + Create Backup
+                </button>
+            </div>
+        </section>
+
+        <!-- Existing backups -->
+        <section class="card">
+            <div class="section-heading">
+                <h2>Available Backups</h2>
+                <p>View, restore, or delete saved backups.</p>
+            </div>
+
+            <!-- Bulk delete toolbar -->
+            <div class="bulk-toolbar">
+                <span id="selectedCount">
+                    0 backups selected
+                </span>
+
+                <button type="button"
+                        class="danger-btn"
+                        id="deleteSelectedButton"
+                        disabled>
+                    Delete Selected
+                </button>
+            </div>
+
+            <!-- Backup table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="checkbox-column">
+                                <input type="checkbox"
+                                       id="selectAllBackups"
+                                       aria-label="Select all backups">
+                            </th>
+
+                            <th>Backup Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="backupList">
+                        <tr>
+                            <td colspan="3">
+                                Loading backups...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- Notifications -->
+<div id="toast"
+     class="toast"
+     role="status"
+     aria-live="polite">
+</div>
+
+<!-- Restore confirmation modal -->
+<div id="restoreModal" class="modal-overlay" hidden>
+    <div class="modal"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="restoreTitle">
+
+        <div class="modal-icon">↻</div>
+
+        <h2 id="restoreTitle">Restore Backup?</h2>
+
+        <p id="restoreMessage"></p>
+
+        <div class="modal-actions">
+            <button type="button"
+                    id="cancelRestore"
+                    class="secondary-btn">
+                Cancel
+            </button>
+
+            <button type="button"
+                    id="confirmRestore"
+                    class="primary-btn">
+                Restore Backup
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div id="deleteModal" class="modal-overlay" hidden>
+    <div class="modal"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="deleteTitle">
+
+        <div class="modal-icon">!</div>
+
+        <h2 id="deleteTitle">Delete Backup?</h2>
+
+        <p id="deleteMessage"></p>
+
+        <div class="modal-actions">
+            <button type="button"
+                    id="cancelDelete"
+                    class="secondary-btn">
+                Cancel
+            </button>
+
+            <button type="button"
+                    id="confirmDelete"
+                    class="danger-btn">
+                Delete Backup
+            </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
