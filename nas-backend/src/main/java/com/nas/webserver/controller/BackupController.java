@@ -3,9 +3,14 @@ package com.nas.webserver.controller;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.util.List;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +39,24 @@ public class BackupController {
     @GetMapping
     public List<String> listBackups() throws IOException {
         return backupService.listBackups();
+    }
+
+    // Download an existing backup
+    @GetMapping("/{filename}/download")
+    public ResponseEntity<Resource> downloadBackup(
+            @PathVariable String filename) throws IOException {
+
+        Path backup = backupService.downloadBackup(filename);
+        Resource resource = new FileSystemResource(backup);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + filename + "\""
+                )
+                .contentLength(resource.contentLength())
+                .body(resource);
     }
 
     // Restore an existing backup
