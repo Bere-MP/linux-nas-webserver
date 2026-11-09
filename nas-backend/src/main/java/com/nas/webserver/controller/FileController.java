@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.FileAlreadyExistsException;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -26,25 +28,36 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    // Upload a file
+    // Upload a file to main storage or a folder
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file)
+    public ResponseEntity<String> uploadFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(required = false) String folder)
             throws IOException {
-        fileService.uploadFile(file);
-        return ResponseEntity.status(HttpStatus.CREATED).body("File uploaded successfully");
+
+        fileService.uploadFile(file, folder);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("File uploaded successfully");
     }
 
-    // List uploaded files
+    // List files in main storage or a folder
     @GetMapping
-    public List<String> listFiles() throws IOException {
-        return fileService.listFiles();
+    public List<String> listFiles(
+            @RequestParam(required = false) String folder)
+            throws IOException {
+
+        return fileService.listFiles(folder);
     }
 
     // Download a file
     @GetMapping("/download/{filename}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String filename)
+    public ResponseEntity<Resource> downloadFile(
+            @PathVariable String filename,
+            @RequestParam(required = false) String folder)
             throws IOException {
-        Path path = fileService.downloadFile(filename);
+
+        Path path = fileService.downloadFile(filename, folder);
         Resource resource = new FileSystemResource(path);
 
         return ResponseEntity.ok()
@@ -59,28 +72,36 @@ public class FileController {
 
     // Delete a file
     @DeleteMapping("/{filename}")
-    public ResponseEntity<String> deleteFile(@PathVariable String filename)
+    public ResponseEntity<String> deleteFile(
+            @PathVariable String filename,
+            @RequestParam(required = false) String folder)
             throws IOException {
-        fileService.deleteFile(filename);
+
+        fileService.deleteFile(filename, folder);
+
         return ResponseEntity.ok("File deleted successfully");
     }
 
-    // Handle invalid filenames
+    // Handle invalid names
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleInvalidFile(IllegalArgumentException e) {
+    public ResponseEntity<String> handleInvalidFile(
+            IllegalArgumentException e) {
+
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    // Handle missing files
-    @ExceptionHandler(java.nio.file.NoSuchFileException.class)
+    // Handle missing files or folders
+    @ExceptionHandler(NoSuchFileException.class)
     public ResponseEntity<String> handleMissingFile(Exception e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("File or folder not found");
     }
 
     // Handle duplicate uploads
-    @ExceptionHandler(java.nio.file.FileAlreadyExistsException.class)
+    @ExceptionHandler(FileAlreadyExistsException.class)
     public ResponseEntity<String> handleDuplicateFile(Exception e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("File already exists");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body("File already exists");
     }
 
     // Handle other storage errors
