@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folders | NAS Server</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/folders.js" defer></script>
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+            <div>
+                <h2>NAS Server</h2>
+                <span>Cloud Storage</span>
+            </div>
+        </div>
+
+        <p class="nav-label">WORKSPACE</p>
+
+        <nav>
+            <a href="/files.html">
+                <span class="nav-icon">📄</span> My Files
+            </a>
+
+            <a href="/folders.html" class="active">
+                <span class="nav-icon">📁</span> Folders
+            </a>
+
+            <a href="/backups.html">
+                <span class="nav-icon">💾</span> Backup & Restore
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>Personal Storage</p>
+            <span>Manage your files securely</span>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="content">
+
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">MY WORKSPACE</p>
+                <h1 id="pageTitle">My Folders</h1>
+                <p id="pageDescription">
+                    Create and organize your storage folders.
+                </p>
+            </div>
+
+            <button type="button"
+                    class="secondary-btn"
+                    id="refreshButton">
+                ↻ Refresh
+            </button>
+        </header>
+
+        <!-- Main folders view -->
+        <div id="foldersView">
+
+            <!-- Create folder -->
+            <section class="card">
+                <div class="section-heading">
+                    <h2>Create Folder</h2>
+                    <p>Add a new folder to your storage.</p>
+                </div>
+
+                <form id="createFolderForm" class="folder-form">
+                    <input type="text"
+                           id="folderName"
+                           placeholder="Enter folder name"
+                           required
+                           maxlength="100">
+
+                    <button type="submit" class="primary-btn">
+                        + Create Folder
+                    </button>
+                </form>
+            </section>
+
+            <!-- All folders -->
+            <section class="card">
+                <div class="section-heading">
+                    <h2>All Folders</h2>
+                    <p>Click a folder to open it.</p>
+                </div>
+
+                <div class="bulk-toolbar">
+                    <span id="selectedCount">
+                        0 folders selected
+                    </span>
+
+                    <button type="button"
+                            class="danger-btn"
+                            id="deleteSelectedButton"
+                            disabled>
+                        Delete Selected
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="checkbox-column">
+                                    <input type="checkbox"
+                                           id="selectAllFolders"
+                                           aria-label="Select all folders">
+                                </th>
+                                <th>Folder Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="folderList">
+                            <tr>
+                                <td colspan="3">
+                                    Loading folders...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Open folder view -->
+        <div id="folderContentsView" hidden>
+
+            <!-- Upload files inside folder -->
+            <section class="card">
+
+                <button type="button"
+                        class="secondary-btn"
+                        id="backToFolders">
+                    ← Back to Folders
+                </button>
+
+                <div class="section-heading"
+                     style="margin-top: 20px;">
+                    <h2 id="currentFolderTitle">Folder</h2>
+                    <p>Upload and manage files in this folder.</p>
+                </div>
+
+                <form id="folderUploadForm">
+
+                    <div class="upload-zone" id="folderUploadZone">
+                        <div class="upload-icon">↑</div>
+
+                        <h3>Drag & drop your file here</h3>
+                        <p>or click below to browse your files</p>
+
+                        <label for="folderFileInput"
+                               class="browse-btn">
+                            Browse Files
+                        </label>
+
+                        <input type="file"
+                               id="folderFileInput"
+                               hidden>
+
+                        <p class="upload-limit">
+                            Maximum file size: 50 MB
+                        </p>
+
+                        <p id="folderSelectedFile"></p>
+                    </div>
+
+                    <button type="submit"
+                            class="primary-btn upload-submit">
+                        Upload File
+                    </button>
+                </form>
+            </section>
+
+            <!-- Files inside folder -->
+            <section class="card">
+                <div class="section-heading">
+                    <h2>Files in Folder</h2>
+                    <p>View, download, or delete files stored here.</p>
+                </div>
+
+                <div class="bulk-toolbar">
+                    <span id="selectedFileCount">
+                        0 files selected
+                    </span>
+
+                    <button type="button"
+                            class="danger-btn"
+                            id="deleteSelectedFiles"
+                            disabled>
+                        Delete Selected
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="checkbox-column">
+                                    <input type="checkbox"
+                                           id="selectAllFiles"
+                                           aria-label="Select all files">
+                                </th>
+                                <th>File Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="folderFileList">
+                            <tr>
+                                <td colspan="3">
+                                    No files yet.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+    </main>
+</div>
+
+<!-- Notifications -->
+<div id="toast"
+     class="toast"
+     role="status"
+     aria-live="polite">
+</div>
+
+<!-- Rename folder modal -->
+<div id="renameModal" class="modal-overlay" hidden>
+    <div class="modal"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="renameTitle">
+
+        <div class="modal-icon">📁</div>
+        <h2 id="renameTitle">Rename Folder</h2>
+        <p>Enter a new name for your folder.</p>
+
+        <form id="renameFolderForm">
+            <input type="text"
+                   id="newFolderName"
+                   required
+                   maxlength="100">
+
+            <div class="modal-actions">
+                <button type="button"
+                        id="cancelRename"
+                        class="secondary-btn">
+                    Cancel
+                </button>
+
+                <button type="submit" class="primary-btn">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div id="deleteModal" class="modal-overlay" hidden>
+    <div class="modal"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="deleteTitle">
+
+        <div class="modal-icon">!</div>
+        <h2 id="deleteTitle">Confirm Deletion</h2>
+        <p id="deleteMessage"></p>
+
+        <div class="modal-actions">
+            <button type="button"
+                    id="cancelDelete"
+                    class="secondary-btn">
+                Cancel
+            </button>
+
+            <button type="button"
+                    id="confirmDelete"
+                    class="danger-btn">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
