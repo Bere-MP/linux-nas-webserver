@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Files | NAS Server</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/files.js" defer></script>
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+            <div>
+                <h2>NAS Server</h2>
+                <span>Cloud Storage</span>
+            </div>
+        </div>
+
+        <p class="nav-label">WORKSPACE</p>
+
+        <nav>
+            <a href="/files.html" class="active">
+                <span class="nav-icon">📄</span> My Files
+            </a>
+            <a href="/folders.html">
+                <span class="nav-icon">📁</span> Folders
+            </a>
+            <a href="/backups.html">
+                <span class="nav-icon">💾</span> Backup & Restore
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>Personal Storage</p>
+            <span>Manage your files securely</span>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="content">
+
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">MY WORKSPACE</p>
+                <h1>My Files</h1>
+                <p>Keep your files organized in one place.</p>
+            </div>
+
+            <button type="button" class="secondary-btn"
+                    id="refreshButton">
+                ↻ Refresh
+            </button>
+        </header>
+
+        <!-- Upload files -->
+        <section class="card">
+            <div class="section-heading">
+                <h2>Upload Files</h2>
+                <p>Add a new file to your storage.</p>
+            </div>
+
+            <form id="uploadForm">
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-icon">↑</div>
+
+                    <h3>Drag & drop your file here</h3>
+                    <p>or click below to browse your files</p>
+
+                    <label for="fileInput" class="browse-btn">
+                        Browse Files
+                    </label>
+
+                    <input type="file" id="fileInput" hidden>
+
+                    <p class="upload-limit">
+                        Maximum file size: 50 MB
+                    </p>
+
+                    <p id="selectedFile"></p>
+                </div>
+
+                <button type="submit"
+                        class="primary-btn upload-submit">
+                    Upload File
+                </button>
+            </form>
+        </section>
+
+        <!-- All files -->
+        <section class="card">
+            <div class="section-heading">
+                <h2>All Files</h2>
+                <p>View and manage your uploaded files.</p>
+            </div>
+
+            <!-- Bulk delete toolbar -->
+            <div class="bulk-toolbar">
+                <span id="selectedCount">0 files selected</span>
+
+                <button type="button"
+                        class="danger-btn"
+                        id="deleteSelectedButton"
+                        disabled>
+                    Delete Selected
+                </button>
+            </div>
+
+            <!-- File table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="checkbox-column">
+                                <input type="checkbox"
+                                       id="selectAllFiles"
+                                       aria-label="Select all files">
+                            </th>
+                            <th>File Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="fileList">
+                        <tr>
+                            <td colspan="3">
+                                Loading files...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- Notifications -->
+<div id="toast" class="toast"
+     role="status" aria-live="polite"></div>
+
+<!-- Delete confirmation modal -->
+<div id="deleteModal" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true"
+         aria-labelledby="modalTitle">
+
+        <div class="modal-icon">!</div>
+        <h2 id="modalTitle">Delete File?</h2>
+        <p id="deleteMessage"></p>
+
+        <div class="modal-actions">
+            <button type="button" id="cancelDelete"
+                    class="secondary-btn">
+                Cancel
+            </button>
+
+            <button type="button" id="confirmDelete"
+                    class="danger-btn">
+                Delete File
+            </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
